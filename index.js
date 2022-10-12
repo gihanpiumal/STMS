@@ -12,6 +12,7 @@ app.use(cors());
 const allRoutes = require("./src/routes/route");
 
 // middlewire
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(allRoutes);
