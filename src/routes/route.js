@@ -6,6 +6,7 @@ let asyncMiddleware = require("./../services/async_middleware");
 const staffAPI = require("../controllers/staff");
 const studentAPI = require("../controllers/student")
 const teacherAPI = require("../controllers/teachers")
+const categoriesAPI = require("../controllers/categories")
 // const upload = require("../middleware/upload");
 
 /////////////////////////////////// Staff API ////////////////////////////////////////////
@@ -65,5 +66,13 @@ router.post("/api/teacher/send_otp/:id", teacherAPI.sendOtpTeacher); // send OTP
 router.post("/api/teacher/email_verification/:id", teacherAPI.emailVerificationTeacher); // email verification Teacher
 
 router.post("/api/teacher/reset_password", teacherAPI.resetPasswordTeacher); // reset password Teacher
+
+/////////////////////////////////// Teachers API ////////////////////////////////////////////
+
+router.post("/api/category/new/add",auth, categoriesAPI.addCategory); // add new Category
+
+router.post("/api/category/get_all", auth, categoriesAPI.getCategory); // get all Category
+
+router.put("/api/category/update/:id", auth, categoriesAPI.updateCategory); // update Category
 
 module.exports = router;
