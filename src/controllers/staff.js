@@ -7,7 +7,7 @@ const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
 // const upload = require("../middleware/upload")
 
-////////////////////// ADD NEW STAFF MEMBER /////////////////////////
+////////////////////// ADD NEW STAFF MEMBER START /////////////////////////
 exports.addStaffMember = async function (req, res) {
   let request = req.body;
   //   console.log(request);
@@ -105,6 +105,10 @@ exports.addStaffMember = async function (req, res) {
   });
 };
 
+////////////////////// ADD NEW STAFF MEMBER END /////////////////////////
+
+////////////////////// GET STAFF MEMBER START /////////////////////////
+
 exports.getStaffMembers = async function (req, res) {
   let request = req.body;
 
@@ -170,6 +174,10 @@ exports.getStaffMembers = async function (req, res) {
   );
 };
 
+////////////////////// GET STAFF MEMBER END /////////////////////////
+
+////////////////////// UPDATE STAFF MEMBER START /////////////////////////
+
 exports.updateStaffMember = async function (req, res) {
   let request = req.body;
   let userId = req.params.id;
@@ -201,7 +209,6 @@ exports.updateStaffMember = async function (req, res) {
       )
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
-    password: Joi.string().required().label("Password"),
   });
 
   let validateResult = schema.validate(validationObject);
@@ -242,6 +249,10 @@ exports.updateStaffMember = async function (req, res) {
   }
 };
 
+////////////////////// UPDATE STAFF MEMBER END /////////////////////////
+
+////////////////////// DELETE STAFF MEMBER START /////////////////////////
+
 exports.deleteStaffMember = function (req, res) {
   staffModel.findByIdAndRemove(req.params.id).exec((err, deletedUser) => {
     if (err) {
@@ -255,7 +266,9 @@ exports.deleteStaffMember = function (req, res) {
   });
 };
 
-////////////////// login ////////////////
+////////////////////// DELETE STAFF MEMBER END /////////////////////////
+
+////////////////////// LOGIN STAFF MEMBER START /////////////////////////
 
 exports.loging = async function (req, res) {
   let request = req.body;
@@ -303,6 +316,10 @@ exports.loging = async function (req, res) {
       .send(ApiResponse.getError("Invalid email or password"));
   }
 };
+
+////////////////////// LOGIN STAFF MEMBER END /////////////////////////
+
+////////////////////// SEND OTP STAFF MEMBER START /////////////////////////
 
 exports.sendOtp = async function (req, res) {
   let request = req.body;
@@ -358,6 +375,10 @@ exports.sendOtp = async function (req, res) {
   }
 };
 
+////////////////////// SEND OTP STAFF MEMBER END /////////////////////////
+
+////////////////////// EMAIL VERIFICATION STAFF MEMBER START /////////////////////////
+
 exports.emailVerification = async function (req, res) {
   let request = req.body;
   let userId = req.params.id;
@@ -396,6 +417,10 @@ exports.emailVerification = async function (req, res) {
     return res.status(400).json({ message: "email is not veryfied" });
   }
 };
+
+////////////////////// EMAIL VERIFICATION STAFF MEMBER END /////////////////////////
+
+////////////////////// RESET PASSWORD STAFF MEMBER START /////////////////////////
 
 
 exports.resetPassword = async function (req, res) {
@@ -453,5 +478,5 @@ exports.resetPassword = async function (req, res) {
     }
   });
 
-  console.log(tempRequest.password);
 };
+////////////////////// RESET PASSWORD STAFF MEMBER END /////////////////////////
