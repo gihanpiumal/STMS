@@ -5,6 +5,7 @@ let asyncMiddleware = require("./../services/async_middleware");
 
 const staffAPI = require("../controllers/staff");
 const studentAPI = require("../controllers/student")
+const teacherAPI = require("../controllers/teachers")
 // const upload = require("../middleware/upload");
 
 /////////////////////////////////// Staff API ////////////////////////////////////////////
@@ -46,5 +47,23 @@ router.post("/api/student/send_otp/:id", studentAPI.sendOtpStudent); // send OTP
 router.post("/api/student/email_verification/:id", studentAPI.emailVerificationStudent); // email verification Student
 
 router.post("/api/student/reset_password", studentAPI.resetPasswordStudent); // reset password Student
+
+/////////////////////////////////// Teachers API ////////////////////////////////////////////
+
+router.post("/api/teacher/new/add",auth, teacherAPI.addTeacher); // add new Teacher
+
+router.post("/api/teacher/get_all", auth, teacherAPI.getTeacher); // get all Teacher
+
+router.put("/api/teacher/update/:id", auth, teacherAPI.updateTeacher); // update Teacher
+
+router.delete("/api/teacher/delete/:id", auth, teacherAPI.deleteTeacher); // delete Teacher
+
+router.post("/api/teacher/login", teacherAPI.logingTeacher); // login Teacher
+
+router.post("/api/teacher/send_otp/:id", teacherAPI.sendOtpTeacher); // send OTP Teacher
+
+router.post("/api/teacher/email_verification/:id", teacherAPI.emailVerificationTeacher); // email verification Teacher
+
+router.post("/api/teacher/reset_password", teacherAPI.resetPasswordTeacher); // reset password Teacher
 
 module.exports = router;
