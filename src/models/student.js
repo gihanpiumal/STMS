@@ -12,6 +12,7 @@ const studentSchema = new mongoose.Schema({
   email: { type: String, required: true },
   avatar: { type: String },
   password: { type: String, required: true },
+  registeredDate: { type: Date, default: Date.now, required: true },
   subject_list: [
     { subject_id: { type: String, required: true } },
   ],

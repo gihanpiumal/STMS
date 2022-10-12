@@ -14,6 +14,9 @@ exports.addSubject = async function (req, res) {
   const schema = Joi.object({
     subject_id: Joi.string().required().label("Subject ID"),
     subject_name: Joi.string().required().label("Subject Name"),
+    isAdmition: Joi.boolean().required().label("Is Admition"),
+    admition: Joi.number().required().label("Admition"),
+    fees: Joi.number().required().label("Fees"),
     category_id: Joi.string().required().label("Category ID"),
     teacher_id: Joi.string().required().label("Teacher ID"),
     classDate: Joi.string().required().label("Class Date"),
@@ -84,6 +87,11 @@ exports.getSubject = async function (req, res) {
         : {
             classDate: request.classDate,
           },
+      request.isAdmition === ""
+        ? {}
+        : {
+            isAdmition: request.isAdmition,
+          },
     ],
   };
 
@@ -144,6 +152,9 @@ exports.updateSubject = async function (req, res) {
 
   const schema = Joi.object({
     subject_name: Joi.string().required().label("Subject Name"),
+    isAdmition: Joi.boolean().required().label("Is Admition"),
+    admition: Joi.number().required().label("Admition"),
+    fees: Joi.number().required().label("Fees"),
     category_id: Joi.string().required().label("Category ID"),
     teacher_id: Joi.string().required().label("Teacher ID"),
     classDate: Joi.string().required().label("Class Date"),

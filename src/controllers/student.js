@@ -47,6 +47,7 @@ exports.addStudent = async function (req, res) {
       )
       .required()
       .label("Subject id list"),
+    registeredDate: Joi.date().raw().required().label("Registered Date"),
     access_level: Joi.string().required().label("Access Level"),
     access_status: Joi.string().required().label("Access Status"),
     isVerified: Joi.boolean().required().label("Verified"),
