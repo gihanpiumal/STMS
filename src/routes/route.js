@@ -7,6 +7,7 @@ const staffAPI = require("../controllers/staff");
 const studentAPI = require("../controllers/student")
 const teacherAPI = require("../controllers/teachers")
 const categoriesAPI = require("../controllers/categories")
+const subjectsAPI = require("../controllers/subjects")
 // const upload = require("../middleware/upload");
 
 /////////////////////////////////// Staff API ////////////////////////////////////////////
@@ -67,12 +68,24 @@ router.post("/api/teacher/email_verification/:id", teacherAPI.emailVerificationT
 
 router.post("/api/teacher/reset_password", teacherAPI.resetPasswordTeacher); // reset password Teacher
 
-/////////////////////////////////// Teachers API ////////////////////////////////////////////
+/////////////////////////////////// Categories API ////////////////////////////////////////////
 
 router.post("/api/category/new/add",auth, categoriesAPI.addCategory); // add new Category
 
 router.post("/api/category/get_all", auth, categoriesAPI.getCategory); // get all Category
 
 router.put("/api/category/update/:id", auth, categoriesAPI.updateCategory); // update Category
+
+router.delete("/api/category/delete/:id", auth, categoriesAPI.deleteCategory); // delete Category
+
+/////////////////////////////////// Subjects API ////////////////////////////////////////////
+
+router.post("/api/subject/new/add",auth, subjectsAPI.addSubject); // add new Subject
+
+router.post("/api/subject/get_all", auth, subjectsAPI.getSubject); // get all Subject
+
+router.put("/api/subject/update/:id", auth, subjectsAPI.updateSubject); // update Subject
+
+router.delete("/api/subject/delete/:id", auth, subjectsAPI.deleteSubject); // delete Subject
 
 module.exports = router;

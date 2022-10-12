@@ -147,3 +147,20 @@ exports.updateCategory = async function (req, res) {
 };
 
 // //   ////////////////////// UPDATE CATEGORY END /////////////////////////
+
+// //   ////////////////////// DELETE CATEGORY START /////////////////////////
+
+exports.deleteCategory = function (req, res) {
+    categoryModel.findByIdAndRemove(req.params.id).exec((err, deletedUser) => {
+      if (err) {
+        return res.status(400).json({ message: "Not deleted", err });
+      }
+      return res.json(
+        ApiResponse.getSuccess({
+          details: deletedUser,
+        })
+      );
+    });
+  };
+  
+  // //   ////////////////////// DELETE CATEGORY END /////////////////////////
