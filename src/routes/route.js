@@ -9,6 +9,7 @@ const teacherAPI = require("../controllers/teachers");
 const categoriesAPI = require("../controllers/categories");
 const subjectsAPI = require("../controllers/subjects");
 const subjectsStudentAPI = require("../controllers/studentSubject");
+const paymentStudentAPI = require("../controllers/paymentStudent");
 // const upload = require("../middleware/upload");
 
 /////////////////////////////////// Staff API ////////////////////////////////////////////
@@ -120,5 +121,31 @@ router.delete(
   auth,
   subjectsStudentAPI.deleteSubjectStudent
 ); // delete Subject Student
+
+/////////////////////////////////// Student Payment API ////////////////////////////////////////////
+
+router.post(
+  "/api/student-payment/new/add",
+  auth,
+  paymentStudentAPI.addPaymentStudent
+); // add new Payment Student
+
+router.post(
+  "/api/student-payment/get_all",
+  auth,
+  paymentStudentAPI.getPaymentStudent
+); // get all Payment Student
+
+router.put(
+  "/api/student-payment/update/:id",
+  auth,
+  paymentStudentAPI.updatePaymentStudent
+); // update Payment Student
+
+router.delete(
+  "/api/student-payment/delete/:id",
+  auth,
+  paymentStudentAPI.deletePaymentStudent
+); // delete Payment Student
 
 module.exports = router;
