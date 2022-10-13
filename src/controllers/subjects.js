@@ -19,6 +19,7 @@ exports.addSubject = async function (req, res) {
     fees: Joi.number().required().label("Fees"),
     category_id: Joi.string().required().label("Category ID"),
     teacher_id: Joi.string().required().label("Teacher ID"),
+    hall_id: Joi.string().required().label("Hall ID"),
     classDate: Joi.string().required().label("Class Date"),
     startTime: Joi.string().required().label("Start Time"),
     endTime: Joi.string().required().label("End Time"),
@@ -92,6 +93,11 @@ exports.getSubject = async function (req, res) {
         : {
             isAdmition: request.isAdmition,
           },
+      request.hall_id === ""
+        ? {}
+        : {
+            hall_id: request.hall_id,
+          },
     ],
   };
 
@@ -117,6 +123,20 @@ exports.getSubject = async function (req, res) {
         localField: "teacher_id",
         foreignField: "_id",
         as: "teacher details",
+      },
+    },
+    {
+      $unwind: {
+        path: "$spec",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "halls",
+        localField: "hall_id",
+        foreignField: "_id",
+        as: "hall details",
       },
     },
     {

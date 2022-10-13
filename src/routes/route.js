@@ -11,6 +11,7 @@ const subjectsAPI = require("../controllers/subjects");
 const subjectsStudentAPI = require("../controllers/studentSubject");
 const paymentStudentAPI = require("../controllers/paymentStudent");
 const paymentSubjectAPI = require("../controllers/paymentSubject");
+const hallAPI = require("../controllers/hall");
 // const upload = require("../middleware/upload");
 
 /////////////////////////////////// Staff API ////////////////////////////////////////////
@@ -174,6 +175,16 @@ router.delete(
   auth,
   paymentSubjectAPI.deletePaymentSubject
 ); // delete Payment Subject
+
+/////////////////////////////////// Hall API ////////////////////////////////////////////
+
+router.post("/api/hall/new/add", auth, hallAPI.addHall); // add new Hall
+
+router.post("/api/hall/get_all", auth, hallAPI.getHall); // get all Hall
+
+router.put("/api/hall/update/:id", auth, hallAPI.updateHall); // update Hall
+
+router.delete("/api/hall/delete/:id", auth, hallAPI.deleteHall); // delete Hall
 
 
 module.exports = router;
