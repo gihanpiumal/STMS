@@ -12,6 +12,8 @@ const subjectsStudentAPI = require("../controllers/studentSubject");
 const paymentStudentAPI = require("../controllers/paymentStudent");
 const paymentSubjectAPI = require("../controllers/paymentSubject");
 const hallAPI = require("../controllers/hall");
+const extraClassAPI = require("../controllers/extraClasses");
+const paymentTeacherAPI = require("../controllers/paymentTeacher");
 // const upload = require("../middleware/upload");
 
 /////////////////////////////////// Staff API ////////////////////////////////////////////
@@ -186,5 +188,56 @@ router.put("/api/hall/update/:id", auth, hallAPI.updateHall); // update Hall
 
 router.delete("/api/hall/delete/:id", auth, hallAPI.deleteHall); // delete Hall
 
+/////////////////////////////////// Extra Classes API ////////////////////////////////////////////
+
+router.post(
+  "/api/extra-class-request/new/add",
+  auth,
+  extraClassAPI.addExtraClass
+); // add new ExtraClass
+
+router.post(
+  "/api/extra-class-request/get_all",
+  auth,
+  extraClassAPI.getExtraClass
+); // get all ExtraClass
+
+router.put(
+  "/api/extra-class-request/update/:id",
+  auth,
+  extraClassAPI.updateExtraClass
+); // update ExtraClass
+
+router.delete(
+  "/api/extra-class-request/delete/:id",
+  auth,
+  extraClassAPI.deleteExtraClass
+); // delete ExtraClass
+
+/////////////////////////////////// Teacher Payment API ////////////////////////////////////////////
+
+router.post(
+  "/api/teacher-payment/new/add",
+  auth,
+  paymentTeacherAPI.addTeacherPayment
+); // add new TeacherPayment
+
+router.post(
+  "/api/teacher-payment/get_all",
+  auth,
+  paymentTeacherAPI.getTeacherPayment
+); // get all TeacherPayment
+
+router.put(
+  "/api/teacher-payment/update/:id",
+  auth,
+  paymentTeacherAPI.updateTeacherPayment
+); // update TeacherPayment
+
+router.delete(
+  "/api/teacher-payment/delete/:id",
+  auth,
+  paymentTeacherAPI.deleteTeacherPayment
+); // delete TeacherPayment
 
 module.exports = router;
