@@ -1,18 +1,19 @@
-const studentModel = require("../models/student");
+const staffModel = require("../models/staffModal");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const ApiResponse = require("../services/responce_helper");
 const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
+// const upload = require("../middleware/upload")
 
-////////////////////// ADD NEW STUDENT START /////////////////////////
-exports.addStudent = async function (req, res) {
+////////////////////// ADD NEW STAFF MEMBER START /////////////////////////
+exports.addStaffMember = async function (req, res) {
   let request = req.body;
   //   console.log(request);
 
   const schema = Joi.object({
-    student_id: Joi.string().required().label("Staff ID"),
+    staff_id: Joi.string().required().label("Staff ID"),
     first_name: Joi.string().required().label("First Name"),
     last_name: Joi.string().required().label("Last Name"),
     DOB: Joi.date().raw().required().label("DOB"),
@@ -39,15 +40,6 @@ exports.addStudent = async function (req, res) {
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
     password: Joi.string().required().label("Password"),
-    subject_list: Joi.array()
-      .items(
-        Joi.object().keys({
-          subject_id: Joi.string().required().label("Subject id"),
-        })
-      )
-      .required()
-      .label("Subject id list"),
-    registeredDate: Joi.date().raw().required().label("Registered Date"),
     access_level: Joi.string().required().label("Access Level"),
     access_status: Joi.string().required().label("Access Status"),
     isVerified: Joi.boolean().required().label("Verified"),
@@ -62,9 +54,9 @@ exports.addStudent = async function (req, res) {
       .send(ApiResponse.getError(validateResult.error.details[0].message));
   }
 
-  let uniqueValidatorResponse = await uniqueValidator.findUnique(studentModel, [
+  let uniqueValidatorResponse = await uniqueValidator.findUnique(staffModel, [
     { email: request.email },
-    { student_id: request.student_id },
+    { staff_id: request.staff_id },
     { NIC: request.NIC },
   ]);
   if (uniqueValidatorResponse) {
@@ -73,7 +65,7 @@ exports.addStudent = async function (req, res) {
 
   //   upload.single('avatar')
 
-  let newUser = studentModel(req.body);
+  let newUser = staffModel(req.body);
 
   //   if (req.file) {
   //     newUser.avatar = req.file.path;
@@ -94,6 +86,7 @@ exports.addStudent = async function (req, res) {
 
           newUser.save((err, addedData) => {
             if (err) {
+              console.log("3");
               return res.status(400).json(
                 ApiResponse.getError({
                   error: err,
@@ -112,11 +105,11 @@ exports.addStudent = async function (req, res) {
   });
 };
 
-////////////////////// ADD STUDENT MEMBER END /////////////////////////
+////////////////////// ADD NEW STAFF MEMBER END /////////////////////////
 
-////////////////////// GET STUDENT START /////////////////////////
+////////////////////// GET STAFF MEMBER START /////////////////////////
 
-exports.getStudent = async function (req, res) {
+exports.getStaffMembers = async function (req, res) {
   let request = req.body;
 
   condition = {
@@ -131,10 +124,10 @@ exports.getStudent = async function (req, res) {
         : {
             last_name: request.last_name,
           },
-      request.subject_id === ""
+      request.access_level === ""
         ? {}
         : {
-            "subject_list.subject_id": request.subject_id,
+            access_level: request.access_level,
           },
       request.access_status === ""
         ? {}
@@ -149,7 +142,7 @@ exports.getStudent = async function (req, res) {
     ],
   };
 
-  let user = await studentModel.aggregate([
+  let user = await staffModel.aggregate([
     { $match: condition },
     // {
     //   $lookup: {
@@ -181,11 +174,11 @@ exports.getStudent = async function (req, res) {
   );
 };
 
-//   ////////////////////// GET STUDENT END /////////////////////////
+////////////////////// GET STAFF MEMBER END /////////////////////////
 
-//   ////////////////////// UPDATE STUDENT START /////////////////////////
+////////////////////// UPDATE STAFF MEMBER START /////////////////////////
 
-exports.updateStudent = async function (req, res) {
+exports.updateStaffMember = async function (req, res) {
   let request = req.body;
   let userId = req.params.id;
   let validationObject = request;
@@ -216,33 +209,27 @@ exports.updateStudent = async function (req, res) {
       )
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
-    subject_list: Joi.array()
-      .items(
-        Joi.object().keys({
-          subject_id: Joi.string().required().label("Subject id"),
-        })
-      )
-      .required()
-      .label("Subject id list"),
   });
 
   let validateResult = schema.validate(validationObject);
 
   if (validateResult.error) {
+    console.log("a");
     return res
       .status(400)
       .send(ApiResponse.getError(validateResult.error.details[0].message));
   }
   let uniqueValidatorResponse = await uniqueValidator.findUniqueForUpdate(
     userId,
-    studentModel,
+    staffModel,
     [{ email: request.email }, { NIC: request.NIC }]
   );
   if (uniqueValidatorResponse) {
+    console.log("b");
     return res.status(409).send(ApiResponse.getError(uniqueValidatorResponse));
   }
 
-  let user = await studentModel.findByIdAndUpdate(
+  let user = await staffModel.findByIdAndUpdate(
     { _id: userId },
     {
       $set: request,
@@ -253,6 +240,7 @@ exports.updateStudent = async function (req, res) {
   let returnObject = user.toJSON();
 
   if (user) {
+    console.log("c");
     return res.status(200).json(
       ApiResponse.getSuccess({
         details: returnObject,
@@ -261,12 +249,12 @@ exports.updateStudent = async function (req, res) {
   }
 };
 
-//   ////////////////////// UPDATE STUDENT END /////////////////////////
+////////////////////// UPDATE STAFF MEMBER END /////////////////////////
 
-//   ////////////////////// DELETE STUDENT START /////////////////////////
+////////////////////// DELETE STAFF MEMBER START /////////////////////////
 
-exports.deleteStudent = function (req, res) {
-  studentModel.findByIdAndRemove(req.params.id).exec((err, deletedUser) => {
+exports.deleteStaffMember = function (req, res) {
+  staffModel.findByIdAndRemove(req.params.id).exec((err, deletedUser) => {
     if (err) {
       return res.status(400).json({ message: "Not deleted", err });
     }
@@ -278,11 +266,11 @@ exports.deleteStudent = function (req, res) {
   });
 };
 
-//   ////////////////////// DELETE STUDENT END /////////////////////////
+////////////////////// DELETE STAFF MEMBER END /////////////////////////
 
-//   ////////////////////// LOGIN STUDENT START /////////////////////////
+////////////////////// LOGIN STAFF MEMBER START /////////////////////////
 
-exports.logingStudent = async function (req, res) {
+exports.loging = async function (req, res) {
   let request = req.body;
 
   const schema = Joi.object({
@@ -305,7 +293,7 @@ exports.logingStudent = async function (req, res) {
       .send(ApiResponse.getError(validateResult.error.details[0].message));
   }
 
-  let user = await studentModel.findOne({ email: request.email });
+  let user = await staffModel.findOne({ email: request.email });
 
   if (user && (await bcrypt.compare(request.password, user.password))) {
     return res.status(200).json(
@@ -329,11 +317,11 @@ exports.logingStudent = async function (req, res) {
   }
 };
 
-//   ////////////////////// LOGIN STUDENT END /////////////////////////
+////////////////////// LOGIN STAFF MEMBER END /////////////////////////
 
-//   ////////////////////// SEND OTP STUDENT START /////////////////////////
+////////////////////// SEND OTP STAFF MEMBER START /////////////////////////
 
-exports.sendOtpStudent = async function (req, res) {
+exports.sendOtp = async function (req, res) {
   let request = req.body;
   let userId = req.params.id;
 
@@ -359,13 +347,14 @@ exports.sendOtpStudent = async function (req, res) {
 
   let email = request.email;
   let otp = await otp_verification.otpSend(email);
+  console.log(otp);
 
   let tempRequest = {
     OTPCode: otp.OTP,
   };
 
   if (otp.success) {
-    let user = await studentModel.findByIdAndUpdate(
+    let user = await staffModel.findByIdAndUpdate(
       { _id: userId },
       {
         $set: tempRequest,
@@ -373,6 +362,7 @@ exports.sendOtpStudent = async function (req, res) {
       { new: true }
     );
 
+    console.log(user);
     return res.json(
       ApiResponse.getSuccess({
         details: "Check your email..",
@@ -385,11 +375,11 @@ exports.sendOtpStudent = async function (req, res) {
   }
 };
 
-//   ////////////////////// SEND OTP STUDENT END /////////////////////////
+////////////////////// SEND OTP STAFF MEMBER END /////////////////////////
 
-//   ////////////////////// EMAIL VERIFICATION STUDENT START /////////////////////////
+////////////////////// EMAIL VERIFICATION STAFF MEMBER START /////////////////////////
 
-exports.emailVerificationStudent = async function (req, res) {
+exports.emailVerification = async function (req, res) {
   let request = req.body;
   let userId = req.params.id;
 
@@ -404,14 +394,14 @@ exports.emailVerificationStudent = async function (req, res) {
       .send(ApiResponse.getError(validateResult.error.details[0].message));
   }
 
-  let user = await studentModel.findById(userId);
+  let user = await staffModel.findById(userId);
 
   let tempRequest = {
     isVerified: true,
   };
 
   if (user.OTPCode == request.OTP) {
-    let users = await studentModel.findByIdAndUpdate(
+    let users = await staffModel.findByIdAndUpdate(
       { _id: userId },
       {
         $set: tempRequest,
@@ -428,15 +418,16 @@ exports.emailVerificationStudent = async function (req, res) {
   }
 };
 
-//   ////////////////////// EMAIL VERIFICATION STUDENT END /////////////////////////
+////////////////////// EMAIL VERIFICATION STAFF MEMBER END /////////////////////////
 
-//   ////////////////////// RESET PASSWORD STUDENT START /////////////////////////
+////////////////////// RESET PASSWORD STAFF MEMBER START /////////////////////////
 
-exports.resetPasswordStudent = async function (req, res) {
+
+exports.resetPassword = async function (req, res) {
   let request = req.body;
   let _id = request._id;
   const saltRounds = 10;
-
+  
   const schema = Joi.object({
     _id: Joi.string().required().label("ID"),
     OTP: Joi.number().optional().label("OTP"),
@@ -445,6 +436,7 @@ exports.resetPasswordStudent = async function (req, res) {
   let validateResult = schema.validate(request);
 
   if (validateResult.error) {
+    console.log("error");
     return res
       .status(400)
       .send(ApiResponse.getError(validateResult.error.details[0].message));
@@ -463,9 +455,9 @@ exports.resetPasswordStudent = async function (req, res) {
           throw hashError;
         } else {
           tempRequest.password = hash;
-          studentModel.findOne({ _id: _id }, async function (err, doc) {
+          staffModel.findOne({ _id: _id }, async function (err, doc) {
             if (doc.OTPCode == request.OTP) {
-              let users = await studentModel.findByIdAndUpdate(
+              let users = await staffModel.findByIdAndUpdate(
                 { _id: doc._id },
                 {
                   $set: tempRequest,
@@ -485,5 +477,6 @@ exports.resetPasswordStudent = async function (req, res) {
       });
     }
   });
+
 };
-//   ////////////////////// RESET PASSWORD STUDENT END /////////////////////////
+////////////////////// RESET PASSWORD STAFF MEMBER END /////////////////////////
