@@ -13,9 +13,8 @@ const studentSchema = new mongoose.Schema({
   avatar: { type: String },
   password: { type: String, required: true },
   registeredDate: { type: Date, default: Date.now, required: true },
-  subject_list: [
-    { subject_id: { type: String, required: true } },
-  ],
+  category_id: { type: mongoose.Schema.ObjectId, required: true },
+  subject_list: [{ type: String, required: true }],
   access_level: { type: String, required: true },
   access_status: { type: String, required: true },
   isVerified: { type: Boolean, required: true, default: false },
