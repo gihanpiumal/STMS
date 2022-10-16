@@ -100,7 +100,7 @@ exports.getSubjectStudent = async function (req, res) {
         from: "students",
         localField: "student_id",
         foreignField: "_id",
-        as: "student details",
+        as: "student_details",
       },
     },
     {
@@ -114,7 +114,7 @@ exports.getSubjectStudent = async function (req, res) {
         from: "subjects",
         localField: "subject_id",
         foreignField: "_id",
-        as: "subject details",
+        as: "subject_details",
       },
     },
     {

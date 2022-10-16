@@ -5,6 +5,7 @@ var jwt = require("jsonwebtoken");
 const ApiResponse = require("../services/responce_helper");
 const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
+const mongoose = require("mongoose");
 
 ////////////////////// ADD NEW STUDENT START /////////////////////////
 exports.addStudent = async function (req, res) {
@@ -132,10 +133,12 @@ exports.getStudent = async function (req, res) {
         : {
             last_name: request.last_name,
           },
-      request.subject_id === ""
+      request.student_id === ""
         ? {}
         : {
-            "subject_list.subject_id": request.subject_id,
+            _id: {
+              $eq: mongoose.Types.ObjectId(request.student_id),
+            },
           },
       request.access_status === ""
         ? {}
