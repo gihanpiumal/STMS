@@ -5,6 +5,7 @@ var jwt = require("jsonwebtoken");
 const ApiResponse = require("../services/responce_helper");
 const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
+const mongoose = require("mongoose");
 
 ////////////////////// ADD NEW SUBJECTS START /////////////////////////
 exports.addSubject = async function (req, res) {
@@ -18,8 +19,8 @@ exports.addSubject = async function (req, res) {
     admition: Joi.number().required().label("Admition"),
     fees: Joi.number().required().label("Fees"),
     category_id: Joi.string().required().label("Category ID"),
-    teacher_id: Joi.string().required().label("Teacher ID"),
-    hall_id: Joi.string().required().label("Hall ID"),
+    teacher_id: Joi.string().empty("").label("Teacher ID"),
+    hall_id: Joi.string().empty("").label("Hall ID"),
     classDate: Joi.string().required().label("Class Date"),
     startTime: Joi.string().required().label("Start Time"),
     endTime: Joi.string().required().label("End Time"),
@@ -76,19 +77,23 @@ exports.getSubject = async function (req, res) {
       request.category_id === ""
         ? {}
         : {
-            category_id: request.category_id,
+          category_id: {
+            $eq: mongoose.Types.ObjectId(request.category_id),
+          },
           },
       request.teacher_id === ""
         ? {}
         : {
-            teacher_id: request.teacher_id,
+          teacher_id: {
+            $eq: mongoose.Types.ObjectId(request.teacher_id),
+          },
           },
       request.classDate === ""
         ? {}
         : {
             classDate: request.classDate,
           },
-      request.isAdmition === ""
+      request.isAdmition === null
         ? {}
         : {
             isAdmition: request.isAdmition,
@@ -96,7 +101,9 @@ exports.getSubject = async function (req, res) {
       request.hall_id === ""
         ? {}
         : {
-            hall_id: request.hall_id,
+          hall_id: {
+            $eq: mongoose.Types.ObjectId(request.hall_id),
+          },
           },
     ],
   };
