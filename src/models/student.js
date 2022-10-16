@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   email: { type: String, required: true },
   avatar: { type: String },
-  password: { type: String, required: true },
+  password: { type: String,},
   registeredDate: { type: Date, default: Date.now, required: true },
   category_id: { type: mongoose.Schema.ObjectId, required: true },
   subject_list: [{ type: String, required: true }],

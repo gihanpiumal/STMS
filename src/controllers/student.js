@@ -38,7 +38,7 @@ exports.addStudent = async function (req, res) {
       )
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
-    password: Joi.string().required().label("Password"),
+    password: Joi.string().empty("").label("Password"),
     subject_list: Joi.array()
       // .items(
       //   Joi.object().keys({
