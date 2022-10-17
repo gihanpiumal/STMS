@@ -12,9 +12,7 @@ const teacherSchema = new mongoose.Schema({
   email: { type: String, required: true },
   avatar: { type: String },
   password: { type: String, required: true },
-  subject_list: [
-    { subject_id: { type: String, required: true } },
-  ],
+  subject_list: [{ type: String, required: true }],
   access_level: { type: String, required: true },
   access_status: { type: String, required: true },
   isVerified: { type: Boolean, required: true, default: false },

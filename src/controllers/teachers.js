@@ -40,12 +40,12 @@ exports.addTeacher = async function (req, res) {
     avatar: Joi.string().empty("").label("Profile Picture"),
     password: Joi.string().required().label("Password"),
     subject_list: Joi.array()
-      .items(
-        Joi.object().keys({
-          subject_id: Joi.string().required().label("Subject id"),
-        })
-      )
-      .required()
+      // .items(
+      //   Joi.object().keys({
+      //     subject_id: Joi.string().required().label("Subject id"),
+      //   })
+      // )
+      .empty("")
       .label("Subject id list"),
     access_level: Joi.string().required().label("Access Level"),
     access_status: Joi.string().required().label("Access Status"),
