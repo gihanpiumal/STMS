@@ -5,6 +5,7 @@ var jwt = require("jsonwebtoken");
 const ApiResponse = require("../services/responce_helper");
 const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
+const mongoose = require("mongoose");
 
 ////////////////////// ADD NEW STUDENT START /////////////////////////
 exports.addStudent = async function (req, res) {
@@ -38,15 +39,16 @@ exports.addStudent = async function (req, res) {
       )
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
-    password: Joi.string().required().label("Password"),
+    password: Joi.string().empty("").label("Password"),
     subject_list: Joi.array()
-      .items(
-        Joi.object().keys({
-          subject_id: Joi.string().required().label("Subject id"),
-        })
-      )
-      .required()
+      // .items(
+      //   Joi.object().keys({
+      //     subject_id: Joi.string().required().label("Subject id"),
+      //   })
+      // )
+      .empty("")
       .label("Subject id list"),
+    category_id: Joi.string().required().label("Category"),
     registeredDate: Joi.date().raw().required().label("Registered Date"),
     access_level: Joi.string().required().label("Access Level"),
     access_status: Joi.string().required().label("Access Status"),
@@ -131,10 +133,12 @@ exports.getStudent = async function (req, res) {
         : {
             last_name: request.last_name,
           },
-      request.subject_id === ""
+      request.student_id === ""
         ? {}
         : {
-            "subject_list.subject_id": request.subject_id,
+            _id: {
+              $eq: mongoose.Types.ObjectId(request.student_id),
+            },
           },
       request.access_status === ""
         ? {}

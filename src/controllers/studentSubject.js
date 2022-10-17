@@ -6,6 +6,7 @@ const ApiResponse = require("../services/responce_helper");
 const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
 const studentSubject = require("../models/studentSubject");
+const mongoose = require("mongoose");
 
 ////////////////////// ADD NEW STUDENT-SUBJECTS START /////////////////////////
 exports.addSubjectStudent = async function (req, res) {
@@ -18,7 +19,7 @@ exports.addSubjectStudent = async function (req, res) {
     enrollDate: Joi.date().raw().required().label("Enrall Date"),
     tempStopDate: Joi.date().empty("").allow(null).label("Temporay Stop Date"),
     admition: Joi.boolean().required().label("Admition"),
-    studentAccess: Joi.boolean().required().label("Student Access"),
+    studentAccess: Joi.string().required().label("Student Access"),
     reasonForStop: Joi.string().empty("").allow(null).label("Reason for stop"),
   });
   let validateResult = schema.validate(request);
@@ -68,19 +69,23 @@ exports.getSubjectStudent = async function (req, res) {
       request.student_id === ""
         ? {}
         : {
-            student_id: request.student_id,
+            student_id: {
+              $eq: mongoose.Types.ObjectId(request.student_id),
+            },
           },
       request.subject_id === ""
         ? {}
         : {
-            subject_id: request.subject_id,
+            subject_id: {
+              $eq: mongoose.Types.ObjectId(request.subject_id),
+            },
           },
       request.admition === null
         ? {}
         : {
             admition: request.admition,
           },
-      request.studentAccess === null
+      request.studentAccess === ""
         ? {}
         : {
             studentAccess: request.studentAccess,
@@ -95,7 +100,7 @@ exports.getSubjectStudent = async function (req, res) {
         from: "students",
         localField: "student_id",
         foreignField: "_id",
-        as: "student details",
+        as: "student_details",
       },
     },
     {
@@ -109,7 +114,7 @@ exports.getSubjectStudent = async function (req, res) {
         from: "subjects",
         localField: "subject_id",
         foreignField: "_id",
-        as: "subject details",
+        as: "subject_details",
       },
     },
     {
@@ -143,10 +148,9 @@ exports.updateSubjectStudent = async function (req, res) {
   let userId = req.params.id;
   let validationObject = request;
 
-  
   const schema = Joi.object({
     tempStopDate: Joi.date().empty("").allow(null).label("Temporay Stop Date"),
-    studentAccess: Joi.boolean().required().label("Student Access"),
+    studentAccess: Joi.string().required().label("Student Access"),
     reasonForStop: Joi.string().empty("").allow(null).label("Reason for stop"),
   });
 
@@ -157,14 +161,14 @@ exports.updateSubjectStudent = async function (req, res) {
       .status(400)
       .send(ApiResponse.getError(validateResult.error.details[0].message));
   }
-//   let uniqueValidatorResponse = await uniqueValidator.findUniqueForUpdate(
-//     userId,
-//     subjectModel,
-//     [{ subject_name: request.subject_name }]
-//   );
-//   if (uniqueValidatorResponse) {
-//     return res.status(409).send(ApiResponse.getError(uniqueValidatorResponse));
-//   }
+  //   let uniqueValidatorResponse = await uniqueValidator.findUniqueForUpdate(
+  //     userId,
+  //     subjectModel,
+  //     [{ subject_name: request.subject_name }]
+  //   );
+  //   if (uniqueValidatorResponse) {
+  //     return res.status(409).send(ApiResponse.getError(uniqueValidatorResponse));
+  //   }
 
   let user = await subjectStudntModel.findByIdAndUpdate(
     { _id: userId },
@@ -190,16 +194,18 @@ exports.updateSubjectStudent = async function (req, res) {
 // //   ////////////////////// DELETE STUDENT-SUBJECTS START /////////////////////////
 
 exports.deleteSubjectStudent = function (req, res) {
-  subjectStudntModel.findByIdAndRemove(req.params.id).exec((err, deletedUser) => {
-    if (err) {
-      return res.status(400).json({ message: "Not deleted", err });
-    }
-    return res.json(
-      ApiResponse.getSuccess({
-        details: deletedUser,
-      })
-    );
-  });
+  subjectStudntModel
+    .findByIdAndRemove(req.params.id)
+    .exec((err, deletedUser) => {
+      if (err) {
+        return res.status(400).json({ message: "Not deleted", err });
+      }
+      return res.json(
+        ApiResponse.getSuccess({
+          details: deletedUser,
+        })
+      );
+    });
 };
 
 // //   ////////////////////// DELETE STUDENT-SUBJECTS END /////////////////////////

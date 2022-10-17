@@ -7,7 +7,7 @@ const studentSubjectSchema = new mongoose.Schema({
   enrollDate: { type: Date, default: Date.now, required: true },
   tempStopDate: { type: Date, default: Date.now,  },
   admition: { type: Boolean, required: true },
-  studentAccess: { type: Boolean, required: true },
+  studentAccess: { type: String, required: true },
   reasonForStop: { type: String, },
 });
 
