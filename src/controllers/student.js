@@ -220,14 +220,6 @@ exports.updateStudent = async function (req, res) {
       )
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
-    subject_list: Joi.array()
-      .items(
-        Joi.object().keys({
-          subject_id: Joi.string().required().label("Subject id"),
-        })
-      )
-      .required()
-      .label("Subject id list"),
   });
 
   let validateResult = schema.validate(validationObject);
