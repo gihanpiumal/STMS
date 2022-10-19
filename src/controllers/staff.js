@@ -5,6 +5,7 @@ var jwt = require("jsonwebtoken");
 const ApiResponse = require("../services/responce_helper");
 const uniqueValidator = require("../services/unique_validator");
 const otp_verification = require("../services/otp_verification");
+const mongoose = require("mongoose");
 // const upload = require("../middleware/upload")
 
 ////////////////////// ADD NEW STAFF MEMBER START /////////////////////////
@@ -39,7 +40,8 @@ exports.addStaffMember = async function (req, res) {
       )
       .label("Email"),
     avatar: Joi.string().empty("").label("Profile Picture"),
-    password: Joi.string().required().label("Password"),
+    password: Joi.string().empty("").label("Password"),
+    registeredDate: Joi.date().raw().required().label("Registered Date"),
     access_level: Joi.string().required().label("Access Level"),
     access_status: Joi.string().required().label("Access Status"),
     isVerified: Joi.boolean().required().label("Verified"),
@@ -139,6 +141,13 @@ exports.getStaffMembers = async function (req, res) {
         : {
             email: request.email,
           },
+          request._id === ""
+            ? {}
+            : {
+              _id: {
+                $eq: mongoose.Types.ObjectId(request._id),
+              },
+              },
     ],
   };
 
