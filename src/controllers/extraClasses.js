@@ -66,7 +66,7 @@ exports.getExtraClass = async function (req, res) {
       request.subject_id === ""
         ? {}
         : {
-            subject_id: request.subject_id,
+          subject_id: request.subject_id,
           },
       request.hall_id === ""
         ? {}
@@ -92,8 +92,8 @@ exports.getExtraClass = async function (req, res) {
       $lookup: {
         from: "subjects",
         localField: "subject_id",
-        foreignField: "subject_id",
-        as: "subject details",
+        foreignField: "_id",
+        as: "subject_details",
       },
     },
     {
@@ -107,7 +107,7 @@ exports.getExtraClass = async function (req, res) {
         from: "halls",
         localField: "hall_id",
         foreignField: "_id",
-        as: "Hall details",
+        as: "Hall_details",
       },
     },
     {
