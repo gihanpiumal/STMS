@@ -115,7 +115,7 @@ exports.getSubject = async function (req, res) {
         from: "categories",
         localField: "category_id",
         foreignField: "_id",
-        as: "category details",
+        as: "category_details",
       },
     },
     {
@@ -129,7 +129,7 @@ exports.getSubject = async function (req, res) {
         from: "teachers",
         localField: "teacher_id",
         foreignField: "_id",
-        as: "teacher details",
+        as: "teacher_details",
       },
     },
     {
@@ -143,7 +143,7 @@ exports.getSubject = async function (req, res) {
         from: "halls",
         localField: "hall_id",
         foreignField: "_id",
-        as: "hall details",
+        as: "hall_details",
       },
     },
     {
@@ -183,7 +183,8 @@ exports.updateSubject = async function (req, res) {
     admition: Joi.number().required().label("Admition"),
     fees: Joi.number().required().label("Fees"),
     category_id: Joi.string().required().label("Category ID"),
-    teacher_id: Joi.string().required().label("Teacher ID"),
+    teacher_id: Joi.string().empty("").label("Teacher ID"),
+    hall_id: Joi.string().empty("").label("Hall ID"),
     classDate: Joi.string().required().label("Class Date"),
     startTime: Joi.string().required().label("Start Time"),
     endTime: Joi.string().required().label("End Time"),

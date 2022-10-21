@@ -106,7 +106,7 @@ exports.getPaymentStudent = async function (req, res) {
         from: "students",
         localField: "student_id",
         foreignField: "_id",
-        as: "student details",
+        as: "student_details",
       },
     },
     {
@@ -120,7 +120,7 @@ exports.getPaymentStudent = async function (req, res) {
         from: "subjects",
         localField: "subject_id",
         foreignField: "_id",
-        as: "subject details",
+        as: "subject_details",
       },
     },
     {
@@ -134,7 +134,7 @@ exports.getPaymentStudent = async function (req, res) {
         from: "staffusers",
         localField: "staff_member_id",
         foreignField: "_id",
-        as: "staff member details",
+        as: "staff_member_details",
       },
     },
     {
@@ -213,9 +213,8 @@ exports.updatePaymentStudent = async function (req, res) {
 // //   ////////////////////// DELETE STUDENT-PAYMENT START /////////////////////////
 
 exports.deletePaymentStudent = function (req, res) {
-  PaymentStudntModel
-    .findByIdAndRemove(req.params.id)
-    .exec((err, deletedUser) => {
+  PaymentStudntModel.findByIdAndRemove(req.params.id).exec(
+    (err, deletedUser) => {
       if (err) {
         return res.status(400).json({ message: "Not deleted", err });
       }
@@ -224,7 +223,8 @@ exports.deletePaymentStudent = function (req, res) {
           details: deletedUser,
         })
       );
-    });
+    }
+  );
 };
 
 // //   ////////////////////// DELETE STUDENT-PAYMENT END /////////////////////////

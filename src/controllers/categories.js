@@ -68,20 +68,20 @@ exports.getCategory = async function (req, res) {
 
   let user = await categoryModel.aggregate([
     { $match: condition },
-    // {
-    //   $lookup: {
-    //     from: "userroles",
-    //     localField: "userRoleId",
-    //     foreignField: "_id",
-    //     as: "userRole",
-    //   },
-    // },
-    // {
-    //   $unwind: {
-    //     path: "$spec",
-    //     preserveNullAndEmptyArrays: true,
-    //   },
-    // },
+    {
+      $lookup: {
+        from: "subjects",
+        localField: "_id",
+        foreignField: "category_id",
+        as: "subjects",
+      },
+    },
+    {
+      $unwind: {
+        path: "$spec",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
   ]);
 
   if (user) {

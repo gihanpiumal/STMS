@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const extraClassSchema = new mongoose.Schema({
-  subject_id: { type: String, required: true },
+  subject_id: { type: mongoose.Schema.ObjectId, required: true },
   hall_id: { type: mongoose.Schema.ObjectId, required: true },
   date: { type: Date, default: Date.now, required: true },
   startTime: { type: String, required: true },
